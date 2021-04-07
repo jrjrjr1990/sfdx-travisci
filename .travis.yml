@@ -11,8 +11,9 @@ before_install:
 - export SFDX_LOG_LEVEL=DEBUG
 - mkdir sfdx
 - wget -qO- $URL | tar xJ -C sfdx --strip-components 1
-- npm install sfdx-cli --global
+- "./sfdx/install"
 - export PATH=./sfdx/$(pwd):$PATH
+- sfdx update
 - sfdx --version
 - sfdx plugins --core
 - echo 'y' | sfdx plugins:install sfdx-git-delta

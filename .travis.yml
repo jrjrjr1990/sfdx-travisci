@@ -11,7 +11,7 @@ before_install:
 - export SFDX_LOG_LEVEL=DEBUG
 - mkdir sfdx
 - wget -qO- $URL | tar xJ -C sfdx --strip-components 1
-- "./sfdx/install"
+- npm install sfdx-cli --global
 - export PATH=./sfdx/$(pwd):$PATH
 - sfdx --version
 - sfdx plugins --core

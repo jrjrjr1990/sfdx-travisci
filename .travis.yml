@@ -17,17 +17,27 @@ before_install:
 - sfdx plugins --core
 - sfdx update
 - echo 'y' | sfdx plugins:install sfdx-git-delta
-- sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key
-  --username $USERNAME --setdefaultdevhubusername -a my-hub-org
-script:
-- sfdx force:org:create -v my-hub-org -s -f config/project-scratch-def.json -a my-hub-org
+# Start Jobs
+jobs:
+    include:
+    if: branch = master
+    - name: Build to DEV Sandbox
+      script: echo "Running job DEV"
+    - stage: "Authorize Org"
+    - sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key
+        --username $USERNAME --setdefaultdevhubusername -a my-hub-org
+    - stage: "Deploy to Scratch Org"
+    - sfdx force:org:create -v my-hub-org -s -f config/project-scratch-def.json -a my-hub-org
   --wait 3
-- sfdx force:org:display -u my-hub-org
-- sfdx force:source:push -u my-hub-org
-- sfdx force:apex:test:run -u my-hub-org --wait 10
-- sfdx force:org:delete -u my-hub-org -p
-- sfdx sgd:source:delta --to HEAD --from HEAD^ --output .
-- cat package/package.xml
-- sfdx force:source:convert -d ./src -x ./package/package.xml
-- cat destructiveChanges/destructiveChanges.xml
-- sfdx force:mdapi:deploy -d ./src -u $USERNAME -w 10
+    - sfdx force:org:display -u my-hub-org
+    - sfdx force:source:push -u my-hub-org
+    - sfdx force:apex:test:run -u my-hub-org --wait 10
+    - sfdx force:org:delete -u my-hub-org -p
+script:
+    - stage: "Find Delta and create a package"
+    - sfdx sgd:source:delta --to HEAD --from HEAD^ --output .
+    - cat package/package.xml
+    - sfdx force:source:convert -d ./src -x ./package/package.xml
+    - cat destructiveChanges/destructiveChanges.xml
+    - stage: "Deploy to Target"
+    - sfdx force:mdapi:deploy -d ./src -u $USERNAME -w 10

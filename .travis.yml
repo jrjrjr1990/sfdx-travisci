@@ -25,4 +25,4 @@ script:
 - sfdx force:apex:test:run -u my-hub-org --wait 10
 - sfdx force:org:delete -u my-hub-org -p
 - sfdx force:source:convert -d ./src
-- sfdx force:mdapi:deploy -d ./src -u my-hub-org -w 10
+- sfdx force:mdapi:deploy -d ./src -u $USERNAME -w 10

@@ -18,9 +18,9 @@ before_install:
 - sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key
   --username $USERNAME --setdefaultdevhubusername -a my-hub-org
 script:
-- sfdx force:org:create -v my-hub-org -s -f config/project-scratch-def.json -a ciorg
+- sfdx force:org:create -v my-hub-org -s -f config/project-scratch-def.json -a my-hub-org
   --wait 3
-- sfdx force:org:display -u ciorg
-- sfdx force:source:push -u ciorg
-- sfdx force:apex:test:run -u ciorg --wait 10
-- sfdx force:org:delete -u ciorg -p
+- sfdx force:org:display -u my-hub-org
+- sfdx force:source:push -u my-hub-org
+- sfdx force:apex:test:run -u my-hub-org --wait 10
+- sfdx force:org:delete -u my-hub-org -p

@@ -13,9 +13,9 @@ before_install:
 - wget -qO- $URL | tar xJ -C sfdx --strip-components 1
 - "./sfdx/install"
 - export PATH=./sfdx/$(pwd):$PATH
-- sfdx update
 - sfdx --version
 - sfdx plugins --core
+- sfdx update
 - echo 'y' | sfdx plugins:install sfdx-git-delta
 - sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key
   --username $USERNAME --setdefaultdevhubusername -a my-hub-org
@@ -28,6 +28,6 @@ script:
 - sfdx force:org:delete -u my-hub-org -p
 - sfdx sgd:source:delta --to HEAD --from HEAD^ --output .
 - cat package/package.xml
-- sfdx force:source:convert -d ./src -x ./manifest/package.xml
+- sfdx force:source:convert -d ./src -x ./package/package.xml
 - cat destructiveChanges/destructiveChanges.xml
 - sfdx force:mdapi:deploy -d ./src -u $USERNAME -w 10

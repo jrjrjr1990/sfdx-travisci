@@ -20,9 +20,11 @@ before_install:
 jobs:
  include:
  - stage: Authorize the Org
+ script:
  - sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key
   --username $USERNAME --setdefaultdevhubusername -a my-hub-org
- - stage: Deploy to Scrath Org
+ - stage: Deploy to Scratch Org
+ script:
  - sfdx force:org:create -v my-hub-org -s -f config/project-scratch-def.json -a my-hub-org
   --wait 3
  - sfdx force:org:display -u my-hub-org
@@ -30,9 +32,11 @@ jobs:
  - sfdx force:apex:test:run -u my-hub-org --wait 10
  - sfdx force:org:delete -u my-hub-org -p
  - stage: Get Delta and Create a Package
+ script:
  - sfdx sgd:source:delta --to HEAD --from HEAD^ --output .
  - cat package/package.xml
  - sfdx force:source:convert -d ./src -x ./package/package.xml
  - cat destructiveChanges/destructiveChanges.xml
  - stage: Deploy to Target Org
+ script:
  - sfdx force:mdapi:deploy -d ./src -u $USERNAME -w 10

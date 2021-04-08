@@ -32,3 +32,16 @@ jobs:
    - cat destructiveChanges/destructiveChanges.xml
    - stage: Deploy to Target Org
    - sfdx force:mdapi:deploy -d ./src -u $USERNAME -w 10
+ - stage: Deploy to QA
+   name: "Authorize the Org"
+   script:
+   - sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key
+    --username $USERNAME --setdefaultdevhubusername -a my-hub-org
+   name: "Get the Delta"
+   script:
+   - sfdx sgd:source:delta --to HEAD --from HEAD^ --output .
+   - cat package/package.xml
+   - sfdx force:source:convert -d ./src -x ./package/package.xml
+   - cat destructiveChanges/destructiveChanges.xml
+   - stage: Deploy to Target Org
+   - sfdx force:mdapi:deploy -d ./src -u $USERNAME -w 10

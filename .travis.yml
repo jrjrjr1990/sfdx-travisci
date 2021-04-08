@@ -17,14 +17,13 @@ before_install:
 - sfdx plugins --core
 - sfdx update
 - echo 'y' | sfdx plugins:install sfdx-git-delta
-jobs:
+jobs: 
  include:
-  - stage: Authorize the Org
-  - sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key
+ - stage: Authorize an Org
+ - sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key
   --username $USERNAME --setdefaultdevhubusername -a my-hub-org
-  script:
-  - sfdx sgd:source:delta --to HEAD --from HEAD^ --output .
-  - cat package/package.xml
-  - sfdx force:source:convert -d ./src -x ./package/package.xml
-  - cat destructiveChanges/destructiveChanges.xml
-  - sfdx force:mdapi:deploy -d ./src -u $USERNAME -w 10
+ - sfdx sgd:source:delta --to HEAD --from HEAD^ --output .
+ - cat package/package.xml
+ - sfdx force:source:convert -d ./src -x ./package/package.xml
+ - cat destructiveChanges/destructiveChanges.xml
+ - sfdx force:mdapi:deploy -d ./src -u $USERNAME -w 10

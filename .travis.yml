@@ -24,8 +24,8 @@ jobs:
    script:
    - sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key
     --username $USERNAME --setdefaultdevhubusername -a my-hub-org
-   name: "Authorize the Org"
-   script:
+   - script:
+     name: "Authorize the Org"
    - sfdx sgd:source:delta --to HEAD --from HEAD^ --output .
    - cat package/package.xml
    - sfdx force:source:convert -d ./src -x ./package/package.xml

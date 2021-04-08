@@ -47,7 +47,7 @@ jobs:
         sfdx force:source:convert -d ./src -x ./package/package.xml
       displayName: Convert to deploy source
     - bash: 
-        sfdx force:mdapi:deploy -d -l RunLocalTests -d ./src -u $(Username) -w 10
+        sfdx force:mdapi:deploy -l RunLocalTests -d ./src -u $(Username) -w 10
       displayName: Deploy source code
 - job: SITDeploy
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
@@ -72,5 +72,5 @@ jobs:
         sfdx force:source:convert -d ./src -x ./package/package.xml
       displayName: Convert to deploy source
     - bash: 
-        sfdx force:mdapi:deploy -d -l RunLocalTests -d ./src -u $(Username) -w 10
+        sfdx force:mdapi:deploy -l RunLocalTests -d ./src -u $(Username) -w 10
       displayName: Deploy source code

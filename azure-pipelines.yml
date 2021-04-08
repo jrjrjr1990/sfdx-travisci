@@ -30,8 +30,10 @@ jobs:
     - task: UseNode@1
     - bash: 
         npm install sfdx-cli --global
-        sfdx --version
       displayName: Install Salesforce CLI
+    - bash: 
+        sfdx update
+      displayName: Update Salesforce CLI
     - bash: 
         echo 'y' | sfdx plugins:install sfdx-git-delta
       displayName: Install Salesforce Git Delta
@@ -54,6 +56,9 @@ jobs:
     - bash: 
         npm install sfdx-cli --global
       displayName: Install Salesforce CLI
+    - bash: 
+        sfdx update
+      displayName: Update Salesforce CLI
     - bash: 
         echo 'y' | sfdx plugins:install sfdx-git-delta
       displayName: Install Salesforce Git Delta

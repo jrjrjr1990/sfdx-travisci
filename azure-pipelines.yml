@@ -7,6 +7,7 @@ trigger:
   batch: "true"
   branches:
     include:
+      - develop
       - master
   paths:
     exclude:
@@ -16,6 +17,7 @@ pr:
   autoCancel: "true"
   branches:
     include:
+      - develop
       - master
   paths:
     exclude:
@@ -23,11 +25,12 @@ pr:
 jobs:
 #Deploy fut-defects to R3DEV
 - job: DEVDeploy
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
   steps:
     - task: UseNode@1
     - bash: 
         npm install sfdx-cli --global
+        sfdx --version
       displayName: Install Salesforce CLI
     - bash: 
         echo 'y' | sfdx plugins:install sfdx-git-delta

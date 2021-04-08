@@ -4,16 +4,73 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
-
-pool:
-  vmImage: ubuntu-latest
-
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+  batch: "true"
+  branches:
+    include:
+      - master
+      - release-uat
+      - release
+      - develop
+      - fut-defects
+  paths:
+    exclude:
+      - README.md
+      - azure-pipelines.yml
+pr:
+  autoCancel: "true"
+  branches:
+    include:
+      - master
+      - release-uat
+      - release
+      - develop
+      - fut-defects
+  paths:
+    exclude:
+      - README.md
+jobs:
+#Deploy fut-defects to R3DEV
+- job: FUTDeploy
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/fut-defects'))
+  steps:
+    - task: UseNode@1
+    - bash: 
+        npm install sfdx-cli --global
+      displayName: Install Salesforce CLI
+    - bash: 
+        echo 'y' | sfdx plugins:install sfdx-git-delta
+      displayName: Install Salesforce Git Delta
+    - bash: 
+        sfdx sgd:source:delta --to HEAD --from HEAD^ --output .
+      displayName: Get Commit Delta Components
+    - bash: 
+        sfdx force:auth:jwt:grant --clientid $(ClientId) --jwtkeyfile ./server.key --username $(Username) --instanceurl $(InstanceURL) -a dadmi
+      displayName: Authorize salesforce org
+    - bash: 
+        sfdx force:source:convert -d ./src -x ./package/package.xml
+      displayName: Convert to deploy source
+    - bash: 
+        sfdx force:mdapi:deploy -d -l RunLocalTests -d ./src -u $USERNAME -w 10
+      displayName: Deploy source code
+- job: SITDeploy
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+  steps:
+    - task: UseNode@1
+    - bash: 
+        npm install sfdx-cli --global
+      displayName: Install Salesforce CLI
+    - bash: 
+        echo 'y' | sfdx plugins:install sfdx-git-delta
+      displayName: Install Salesforce Git Delta
+    - bash: 
+        sfdx sgd:source:delta --to HEAD --from HEAD^ --output .
+      displayName: Get Commit Delta Components
+    - bash: 
+        sfdx force:auth:jwt:grant --clientid $(ClientId) --jwtkeyfile ./server.key --username $(Username) --instanceurl $(InstanceURL) -a dadmi
+      displayName: Authorize salesforce org
+    - bash: 
+        sfdx force:source:convert -d ./src -x ./package/package.xml
+      displayName: Convert to deploy source
+    - bash: 
+        sfdx force:mdapi:deploy -d -l RunLocalTests -d ./src -u $USERNAME -w 10
+      displayName: Deploy source code

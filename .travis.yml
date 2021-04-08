@@ -20,13 +20,15 @@ before_install:
 jobs:
  include:
  - stage: Authorize the Org
+ script:
  - sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key
   --username $USERNAME --setdefaultdevhubusername -a my-hub-org
  - stage: Get Delta and Create a Package
-script:
+ script:
  - sfdx sgd:source:delta --to HEAD --from HEAD^ --output .
  - cat package/package.xml
  - sfdx force:source:convert -d ./src -x ./package/package.xml
  - cat destructiveChanges/destructiveChanges.xml
  - stage: Deploy to Target Org
+ script:
  - sfdx force:mdapi:deploy -d ./src -u $USERNAME -w 10

@@ -20,6 +20,7 @@ before_install:
 jobs: 
  include:
  - stage: Authorize an Org
+ script:
  - sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key
   --username $USERNAME --setdefaultdevhubusername -a my-hub-org
  - sfdx sgd:source:delta --to HEAD --from HEAD^ --output .

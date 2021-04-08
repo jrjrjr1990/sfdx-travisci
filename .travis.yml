@@ -24,16 +24,16 @@ jobs:
       script:
       - sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key
        --username $USERNAME --setdefaultdevhubusername -a my-hub-org
-    -
-      script:
-      - sfdx sgd:source:delta --to HEAD --from HEAD^ --output .
-      - cat package/package.xml
-      - sfdx force:source:convert -d ./src -x ./package/package.xml
-      - cat destructiveChanges/destructiveChanges.xml
-      name: "Get the Delta"
-    -
-      script:
-      - sfdx force:mdapi:deploy -d ./src -u $USERNAME -w 10
-      name: "Deploy to Target Org"
+      -
+       script:
+       - sfdx sgd:source:delta --to HEAD --from HEAD^ --output .
+       - cat package/package.xml
+       - sfdx force:source:convert -d ./src -x ./package/package.xml
+       - cat destructiveChanges/destructiveChanges.xml
+       name: "Get the Delta"
+      -
+       script:
+       - sfdx force:mdapi:deploy -d ./src -u $USERNAME -w 10
+       name: "Deploy to Target Org"
     - stage: Deploy to QA
       script: ./deploy

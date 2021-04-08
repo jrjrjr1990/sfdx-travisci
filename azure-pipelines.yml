@@ -28,6 +28,8 @@ jobs:
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
   steps:
     - task: UseNode@1
+      inputs:
+        version: '14.6.0'
     - bash: 
         npm install sfdx-cli --global
       displayName: Install Salesforce CLI

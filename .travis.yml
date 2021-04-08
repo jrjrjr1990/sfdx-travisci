@@ -23,6 +23,7 @@ jobs:
       name: "Get the Delta and Deploy"
       script:
       - sfdx sgd:source:delta --to HEAD --from HEAD^ --output .
+      - displayName: Install Salesforce CLI
       - cat package/package.xml
       - sfdx force:source:convert -d ./src -x ./package/package.xml
       - cat destructiveChanges/destructiveChanges.xml

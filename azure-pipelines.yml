@@ -35,16 +35,13 @@ jobs:
         npm install sfdx-cli --global
       displayName: Install Salesforce CLI
     - bash: 
-        npm update --global sfdx-cli
-      displayName: Update Salesforce CLI
-    - bash: 
         echo 'y' | sfdx plugins:install sfdx-git-delta
       displayName: Install Salesforce Git Delta
     - bash: 
         sfdx sgd:source:delta --to HEAD --from HEAD^ --output .
       displayName: Get Commit Delta Components
     - bash: 
-        sfdx force:auth:jwt:grant --clientid $(ClientId) --jwtkeyfile ./server.key --username $(Username) --instanceurl $(InstanceURL) -a dadmi
+        sfdx force:auth:jwt:grant --clientid $(ClientId) --jwtkeyfile assets/server.key --username $(Username) --instanceurl $(InstanceURL) -a dadmi
       displayName: Authorize salesforce org
     - bash: 
         sfdx force:source:convert -d ./src -x ./package/package.xml
@@ -63,16 +60,13 @@ jobs:
         npm install sfdx-cli --global
       displayName: Install Salesforce CLI
     - bash: 
-        npm update --global sfdx-cli
-      displayName: Update Salesforce CLI
-    - bash: 
         echo 'y' | sfdx plugins:install sfdx-git-delta
       displayName: Install Salesforce Git Delta
     - bash: 
         sfdx sgd:source:delta --to HEAD --from HEAD^ --output .
       displayName: Get Commit Delta Components
     - bash: 
-        sfdx force:auth:jwt:grant --clientid $(ClientId) --jwtkeyfile ./server.key --username $(Username) --instanceurl $(InstanceURL) -a dadmi
+        sfdx force:auth:jwt:grant --clientid $(ClientId) --jwtkeyfile assets/server.key --username $(Username) --instanceurl $(InstanceURL) -a dadmi
       displayName: Authorize salesforce org
     - bash: 
         sfdx force:source:convert -d ./src -x ./package/package.xml

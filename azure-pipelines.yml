@@ -41,13 +41,13 @@ jobs:
         sfdx sgd:source:delta --to HEAD --from HEAD^ --output .
       displayName: Get Commit Delta Components
     - bash: 
-        sfdx force:auth:jwt:grant --clientid $(ClientId) --jwtkeyfile assets/server.key --username $(Username) --instanceurl $(InstanceURL) -a dadmi
+        sfdx force:auth:jwt:grant --clientid $(ClientId) --jwtkeyfile assets/server.key --username $(Username) --setdefaultdevhubusername -a my-hub-org
       displayName: Authorize salesforce org
     - bash: 
         sfdx force:source:convert -d ./src -x ./package/package.xml
       displayName: Convert to deploy source
     - bash: 
-        sfdx force:mdapi:deploy -d -l RunLocalTests -d ./src -u $USERNAME -w 10
+        sfdx force:mdapi:deploy -d -l RunLocalTests -d ./src -u $(Username) -w 10
       displayName: Deploy source code
 - job: SITDeploy
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
@@ -66,11 +66,11 @@ jobs:
         sfdx sgd:source:delta --to HEAD --from HEAD^ --output .
       displayName: Get Commit Delta Components
     - bash: 
-        sfdx force:auth:jwt:grant --clientid $(ClientId) --jwtkeyfile assets/server.key --username $(Username) --instanceurl $(InstanceURL) -a dadmi
+        sfdx force:auth:jwt:grant --clientid $(ClientId) --jwtkeyfile assets/server.key --username $(Username) --setdefaultdevhubusername -a my-hub-org
       displayName: Authorize salesforce org
     - bash: 
         sfdx force:source:convert -d ./src -x ./package/package.xml
       displayName: Convert to deploy source
     - bash: 
-        sfdx force:mdapi:deploy -d -l RunLocalTests -d ./src -u $USERNAME -w 10
+        sfdx force:mdapi:deploy -d -l RunLocalTests -d ./src -u $(Username) -w 10
       displayName: Deploy source code

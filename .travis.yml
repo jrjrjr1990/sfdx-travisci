@@ -23,7 +23,6 @@ jobs:
  - sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key
   --username $USERNAME --setdefaultdevhubusername -a my-hub-org
  - stage: Deploy to Scrath Org
-script:
  - sfdx force:org:create -v my-hub-org -s -f config/project-scratch-def.json -a my-hub-org
   --wait 3
  - sfdx force:org:display -u my-hub-org

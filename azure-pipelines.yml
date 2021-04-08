@@ -32,7 +32,7 @@ jobs:
         npm install sfdx-cli --global
       displayName: Install Salesforce CLI
     - bash: 
-        sfdx update
+        npm update --global sfdx-cli
       displayName: Update Salesforce CLI
     - bash: 
         echo 'y' | sfdx plugins:install sfdx-git-delta
@@ -57,7 +57,7 @@ jobs:
         npm install sfdx-cli --global
       displayName: Install Salesforce CLI
     - bash: 
-        sfdx update
+        npm update --global sfdx-cli
       displayName: Update Salesforce CLI
     - bash: 
         echo 'y' | sfdx plugins:install sfdx-git-delta

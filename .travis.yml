@@ -20,10 +20,13 @@ before_install:
 jobs:
   include:
     - stage: Deploy to DEV
-      name: "asd"
+      name: "Authorize the Org"
       script: ./test 1
     - # stage name not required, will continue to use `test`
       script: ./test 2
-      name: "def"
+      name: "Get the Delta"
+    - # stage name not required, will continue to use `test`
+      script: ./test 2
+      name: "Deploy to Target Org"
     - stage: Deploy to QA
       script: ./deploy

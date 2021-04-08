@@ -8,10 +8,6 @@ trigger:
   branches:
     include:
       - master
-      - release-uat
-      - release
-      - develop
-      - fut-defects
   paths:
     exclude:
       - README.md
@@ -21,17 +17,13 @@ pr:
   branches:
     include:
       - master
-      - release-uat
-      - release
-      - develop
-      - fut-defects
   paths:
     exclude:
       - README.md
 jobs:
 #Deploy fut-defects to R3DEV
-- job: FUTDeploy
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/fut-defects'))
+- job: DEVDeploy
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   steps:
     - task: UseNode@1
     - bash: 
@@ -53,7 +45,7 @@ jobs:
         sfdx force:mdapi:deploy -d -l RunLocalTests -d ./src -u $USERNAME -w 10
       displayName: Deploy source code
 - job: SITDeploy
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   steps:
     - task: UseNode@1
     - bash: 

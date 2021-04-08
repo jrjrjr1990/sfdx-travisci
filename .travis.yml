@@ -20,9 +20,11 @@ before_install:
 jobs:
  include:
  - stage: Deploy to DEV
+   name: "Authorize the Org"
    script:
    - sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key
     --username $USERNAME --setdefaultdevhubusername -a my-hub-org
+   - # stage name not required, will continue to use `test`
    script:
    - sfdx sgd:source:delta --to HEAD --from HEAD^ --output .
    - cat package/package.xml
@@ -31,9 +33,11 @@ jobs:
    - stage: Deploy to Target Org
    - sfdx force:mdapi:deploy -d ./src -u $USERNAME -w 10
  - stage: Deploy to QA
+   name: "Authorize the Org"
    script:
    - sfdx force:auth:jwt:grant --clientid $CONSUMERKEY --jwtkeyfile assets/server.key
     --username $USERNAME --setdefaultdevhubusername -a my-hub-org
+   name: "Get the Delta"
    script:
    - sfdx sgd:source:delta --to HEAD --from HEAD^ --output .
    - cat package/package.xml
